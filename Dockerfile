@@ -18,9 +18,10 @@ RUN apt update && \
 	DEBIAN_FRONTEND=noninteractive apt install -y \
 		--no-install-recommends ca-certificates tzdata && \
 	rm -rf /var/cache/debconf/* && \
-	apt clean && \ 
-apt autoremove -y && \
+	apt clean && \
+    apt autoremove -y && \
 	rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /mattyb/target/release/mattyb /usr/local/bin/mattyb
 ENTRYPOINT [ "mattyb" ]
+CMD [ "-d", "matthewblair.net", "-c", "/var/cache/acme", "--prod" ]
