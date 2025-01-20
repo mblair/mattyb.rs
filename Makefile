@@ -14,8 +14,11 @@ fmt: freshen
 	# markdownfmt -w *.md
 	# prettier --write *.css *.html
 
-depupdate:
+update:
 	cargo update
+
+distupdate:
+	cargo upgrade --incompatible
 
 build:
 	cargo build
@@ -37,4 +40,4 @@ run: docker
 
 restart: docker stop run
 
-.PHONY: all clean freshen fmt depupdate build docker dockerprune stop run restart
+.PHONY: all clean freshen fmt update distupdate build docker dockerprune stop run restart
