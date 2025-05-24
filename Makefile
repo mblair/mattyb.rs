@@ -3,41 +3,31 @@ all: clean fmt build docker
 clean:
 	cargo clean
 
-freshen:
-	./util.sh --freshen
-
-fmt: freshen
-	# TODO: guard this, since it doesn't work on Linux
-	#gsed -i'' -e's/[[:space:]]*$$//g' Makefile
+fmt:
 	cargo fmt
-	shfmt -w *.sh
-	# markdownfmt -w *.md
-	# prettier --write *.css *.html
-
-update:
-	cargo update
-
-distupdate:
-	cargo upgrade --incompatible
+	prettier --write static/*.html static/*.css *.md
 
 build:
-	cargo build
+	cargo build --release
+
+test:
+	cargo test
 
 docker:
-	# TODO: fix this to work when there's no commit metadata
-	#docker build -t web:$$(git rev-parse --short HEAD) .
-	docker build -t web:latest .
+	docker build -t matthewblair-net:$$(git rev-parse --short HEAD) .
 
 dockerprune:
 	docker system prune -a -f
 
 stop:
-	docker stop $$(docker ps --quiet)
+	docker stop $$(docker ps --quiet --filter ancestor=matthewblair-net) || true
 
 run: docker
-	#docker run -p 80:80 -p 443:443 -v /var/cache/acme:/var/cache/acme -d --restart=always web:$$(git rev-parse --short HEAD) -- -c /var/cache/acme
-	docker run -p 80:80 -p 443:443 -v /var/cache/acme:/var/cache/acme -d --restart=always web:latest
+	docker run -p 80:80 -p 443:443 -v /var/cache/acme:/var/cache/acme -d --restart=always matthewblair-net:$$(git rev-parse --short HEAD)
 
 restart: docker stop run
 
-.PHONY: all clean freshen fmt update distupdate build docker dockerprune stop run restart
+dev:
+	cargo run
+
+.PHONY: all clean fmt build test docker dockerprune stop run restart dev

@@ -1,27 +1,44 @@
-# This is largely borrowed from lychee's Dockerfile, which does a good job of caching dependencies.
-FROM rust:bookworm AS builder
+# Build stage
+FROM rust:1.82 as builder
 
-RUN USER=root cargo new --bin mattyb
-WORKDIR /mattyb
+WORKDIR /app
 
-COPY /Cargo.toml Cargo.toml
-RUN cargo build --release && \
-	rm src/*.rs
+# Copy dependency files first for better caching
+COPY Cargo.toml Cargo.lock ./
 
-COPY . ./
-RUN rm ./target/release/deps/mattyb* && \
-	cargo build --release
+# Create a dummy main.rs to build dependencies
+RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN cargo build --release
+RUN rm src/main.rs
 
+# Copy source code and static files
+COPY src/ src/
+COPY static/ static/
+
+# Build the application
+RUN cargo build --release
+
+# Runtime stage
 FROM debian:bookworm-slim
 
-RUN apt update && \
-	DEBIAN_FRONTEND=noninteractive apt install -y \
-	--no-install-recommends ca-certificates tzdata && \
-	rm -rf /var/cache/debconf/* && \
-	apt clean && \
-	apt autoremove -y && \
-	rm -rf /var/lib/apt/lists/*
+# Install SSL certificates
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /mattyb/target/release/mattyb /usr/local/bin/mattyb
-ENTRYPOINT [ "mattyb" ]
-CMD [ "-d", "matthewblair.net", "-c", "/var/cache/acme", "--prod" ]
+# Create cache directory for ACME certificates
+RUN mkdir -p /var/cache/acme
+
+WORKDIR /app
+
+# Copy the binary from builder stage
+COPY --from=builder /app/target/release/matthewblair-net /app/matthewblair-net
+
+# Create non-root user
+RUN useradd -r -s /bin/false appuser
+RUN chown -R appuser:appuser /app /var/cache/acme
+USER appuser
+
+EXPOSE 80 443
+
+ENTRYPOINT ["/app/matthewblair-net"]
