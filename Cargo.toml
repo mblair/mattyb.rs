@@ -1,14 +1,14 @@
 [package]
 name = "mattyb"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 axum = "0.8.4"
 axum-server = { version = "0.7.2", features = ["tls-rustls"] }
 clap = { version = "4.5", features = ["derive"] }
 log = "0.4.27"
-rustls-acme = { version = "0.13.0", features = ["axum"] }
+rustls-acme = { version = "0.14.0", features = ["axum"] }
 simple_logger = "5.0.0"
-tokio = { version = "1.45.1", features = ["full"] }
+tokio = { version = "1.46.1", features = ["full"] }
 tokio-stream = "0.1.17"
