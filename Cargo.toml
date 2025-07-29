@@ -10,5 +10,5 @@ clap = { version = "4.5", features = ["derive"] }
 log = "0.4.27"
 rustls-acme = { version = "0.14.0", features = ["axum"] }
 simple_logger = "5.0.0"
-tokio = { version = "1.46.1", features = ["full"] }
+tokio = { version = "1.47.0", features = ["full"] }
 tokio-stream = "0.1.17"
