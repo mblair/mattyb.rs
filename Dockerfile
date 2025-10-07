@@ -1,5 +1,5 @@
 # This is largely borrowed from lychee's Dockerfile, which does a good job of caching dependencies.
-FROM rust:bookworm AS builder
+FROM rust:trixie AS builder
 
 RUN USER=root cargo new --bin mattyb
 WORKDIR /mattyb
