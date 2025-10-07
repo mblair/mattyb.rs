@@ -12,7 +12,7 @@ COPY . ./
 RUN rm ./target/release/deps/mattyb* && \
 	cargo build --release
 
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 RUN apt update && \
 	DEBIAN_FRONTEND=noninteractive apt install -y \
