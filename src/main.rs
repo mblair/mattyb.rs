@@ -1,7 +1,7 @@
-use axum::{routing::get, Router};
+use axum::{Router, routing::get};
 use clap::Parser;
-use rustls_acme::caches::DirCache;
 use rustls_acme::AcmeConfig;
+use rustls_acme::caches::DirCache;
 use std::net::{Ipv6Addr, SocketAddr};
 use std::path::PathBuf;
 use tokio_stream::StreamExt;
