@@ -9,6 +9,6 @@ axum-server = { version = "0.7.2", features = ["tls-rustls"] }
 clap = { version = "4.5", features = ["derive"] }
 log = "0.4.28"
 rustls-acme = { version = "0.14.1", features = ["axum"] }
-simple_logger = "5.0.0"
-tokio = { version = "1.47.1", features = ["full"] }
+simple_logger = "5.1.0"
+tokio = { version = "1.48.0", features = ["full"] }
 tokio-stream = "0.1.17"
