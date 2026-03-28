@@ -4,7 +4,7 @@ FROM rust:trixie AS builder
 RUN USER=root cargo new --bin mattyb
 WORKDIR /mattyb
 
-COPY /Cargo.toml Cargo.toml
+COPY Cargo.toml Cargo.lock ./
 RUN cargo build --release && \
 	rm src/*.rs
 
@@ -24,4 +24,4 @@ RUN apt update && \
 
 COPY --from=builder /mattyb/target/release/mattyb /usr/local/bin/mattyb
 ENTRYPOINT [ "mattyb" ]
-CMD [ "-d", "matthewblair.net", "-c", "/var/cache/acme", "--prod" ]
+CMD [ "-d", "matthewblair.net", "-c", "/var/cache/acme", "--prod", "--bind", "0.0.0.0" ]

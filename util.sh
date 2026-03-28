@@ -14,6 +14,10 @@ if [[ "$#" -gt 0 ]]; then
 			freshen
 			shift
 			;;
+		*)
+			echo "unknown argument: $1" >&2
+			exit 1
+			;;
 		esac
 	done
 fi
