@@ -8,8 +8,8 @@ anyhow = "1.0.104"
 axum = "0.8.9"
 axum-server = { version = "0.8.0", features = ["tls-rustls"] }
 clap = { version = "4.6", features = ["derive"] }
-log = "0.4.33"
-rustls-acme = { version = "0.15.3", features = ["axum"] }
+log = "0.4.34"
+rustls-acme = { version = "0.15.4", features = ["axum"] }
 simple_logger = "5.2.0"
 tokio = { version = "1.53.1", features = ["full"] }
 tokio-stream = "0.1.19"
